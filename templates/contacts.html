@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contacts - Job Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 1150px;
+            margin: auto;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        input, select, textarea {
+            padding: 10px;
+            margin: 6px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        textarea {
+            width: 90%;
+        }
+        button, .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .delete {
+            background: #dc2626;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        .message {
+            background: #e0f2fe;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        a {
+            color: #2563eb;
+        }
+        .btn {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+    <h1>Manage Contacts</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="card">
+        <h2>Add New Contact</h2>
+
+        <form action="{{ url_for('add_contact') }}" method="POST">
+
+            <select name="company_id" required>
+                <option value="">Select Company</option>
+                {% for company in companies %}
+                    <option value="{{ company.company_id }}">
+                        {{ company.company_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <input type="text"
+                   name="contact_name"
+                   placeholder="Contact Name"
+                   maxlength="100"
+                   required>
+
+            <input type="text"
+                   name="title"
+                   placeholder="Job Title (e.g. Recruiter)"
+                   maxlength="100">
+
+            <input type="email"
+                   name="email"
+                   placeholder="Email"
+                   maxlength="100">
+
+            <input type="tel"
+                   name="phone"
+                   placeholder="Phone Number"
+                   maxlength="20">
+
+            <input type="url"
+                   name="linkedin_url"
+                   placeholder="LinkedIn URL"
+                   maxlength="200">
+
+            <textarea name="notes"
+                      placeholder="Notes about this contact"
+                      rows="3"></textarea>
+
+            <button type="submit">Add Contact</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Contact List</h2>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Company</th>
+                        <th>Title</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>LinkedIn</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for contact in contacts %}
+                    <tr>
+                        <td>{{ contact.contact_name }}</td>
+                        <td>{{ contact.company_name or '-' }}</td>
+                        <td>{{ contact.title or '-' }}</td>
+                        <td>{{ contact.email or '-' }}</td>
+                        <td>{{ contact.phone or '-' }}</td>
+
+                        <td>
+                            {% if contact.linkedin_url %}
+                                <a href="{{ contact.linkedin_url }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    View Profile
+                                </a>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <a class="btn"
+                               href="{{ url_for('edit_contact', contact_id=contact.contact_id) }}">
+                                Edit
+                            </a>
+
+                            <form action="{{ url_for('delete_contact', contact_id=contact.contact_id) }}"
+                                  method="POST"
+                                  style="display:inline;"
+                                  onsubmit="return confirm('Delete this contact?');">
+                                <button type="submit" class="delete">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7">
+                            No contacts added yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

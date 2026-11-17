@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | Job Application Tracker</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f3f6fb;
+            color: #17233b;
+        }
+
+        .navbar {
+            background: #14213d;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 18px;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #dbe5f5;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 45px auto;
+            padding: 0 24px;
+        }
+
+        .welcome {
+            margin-bottom: 35px;
+        }
+
+        .welcome h1 {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        .welcome p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 26px;
+            border-radius: 14px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #e5eaf2;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.09);
+        }
+
+        .stat-label {
+            font-size: 15px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 20px 0 12px;
+        }
+
+        .stat-footer {
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .feature-card {
+            margin-top: 35px;
+            background: linear-gradient(120deg, #1e3a8a, #2563eb);
+            color: white;
+            padding: 35px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .feature-card h2 {
+            margin-top: 0;
+            font-size: 25px;
+        }
+
+        .feature-card p {
+            color: #dbeafe;
+            line-height: 1.6;
+            max-width: 650px;
+        }
+
+        .feature-button {
+            display: inline-block;
+            background: white;
+            color: #1d4ed8;
+            text-decoration: none;
+            padding: 13px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .feature-button:hover {
+            background: #eff6ff;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 45px;
+            padding-bottom: 25px;
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .welcome h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <a class="brand" href="{{ url_for('dashboard') }}">
+            JobTracker
+        </a>
+
+        <nav class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('companies') }}">Companies</a>
+            <a href="{{ url_for('jobs') }}">Jobs</a>
+            <a href="{{ url_for('applications') }}">Applications</a>
+            <a href="{{ url_for('contacts') }}">Contacts</a>
+            <a href="{{ url_for('job_match') }}">Job Match</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <section class="welcome">
+            <h1>Job Application Dashboard</h1>
+            <p>
+                Manage your job search, track applications,
+                and find opportunities that match your skills.
+            </p>
+        </section>
+
+        <h2 class="section-title">Your Overview</h2>
+
+        <section class="stats-grid">
+
+            <a class="stat-card" href="{{ url_for('companies') }}">
+                <div class="stat-label">Companies</div>
+                <div class="stat-number">{{ companies }}</div>
+                <div class="stat-footer">Manage Companies →</div>
+            </a>
+
+            <a class="stat-card" href="{{ url_for('jobs') }}">
+                <div class="stat-label">Jobs</div>
+                <div class="stat-number">{{ jobs }}</div>
+                <div class="stat-footer">View Job Listings →</div>
+            </a>
+
+            <a class="stat-card" href="{{ url_for('applications') }}">
+                <div class="stat-label">Applications</div>
+                <div class="stat-number">{{ applications }}</div>
+                <div class="stat-footer">Track Applications →</div>
+            </a>
+
+            <a class="stat-card" href="{{ url_for('contacts') }}">
+                <div class="stat-label">Contacts</div>
+                <div class="stat-number">{{ contacts }}</div>
+                <div class="stat-footer">Manage Contacts →</div>
+            </a>
+
+        </section>
+
+        <section class="feature-card">
+            <div>
+                <h2>Find Your Best Job Match</h2>
+                <p>
+                    Enter your skills and compare them against job
+                    requirements. Discover your strongest matches
+                    and see which skills you may still need.
+                </p>
+            </div>
+
+            <a class="feature-button" href="{{ url_for('job_match') }}">
+                Find Matches →
+            </a>
+        </section>
+
+        <footer class="footer">
+            Job Application Tracker | Database Management Project
+        </footer>
+
+    </main>
+
+</body>
+</html>

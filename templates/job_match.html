@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Job Match - Job Tracker</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        input {
+            width: 75%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        progress {
+            width: 100%;
+            height: 16px;
+            accent-color: #22c55e;
+        }
+
+        .missing {
+            color: #dc2626;
+        }
+
+        .matched {
+            color: #15803d;
+        }
+
+        a {
+            color: #2563eb;
+        }
+
+        @media (max-width: 600px) {
+            input {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <a href="{{ url_for('dashboard') }}">
+        ← Back to Dashboard
+    </a>
+
+    <h1>Job Match</h1>
+
+    <p>
+        Enter your skills to see which jobs best match
+        your experience.
+    </p>
+
+    <div class="card">
+        <form method="POST" action="{{ url_for('job_match') }}">
+
+            <input
+                type="text"
+                name="skills"
+                placeholder="Example: Python, SQL, Flask"
+                value="{{ skills_input or '' }}"
+                required
+            >
+
+            <button type="submit">
+                Find Matches
+            </button>
+
+        </form>
+    </div>
+
+    {% if results is not none %}
+
+        <h2>Matching Jobs</h2>
+
+        {% for job in results %}
+
+        <div class="card">
+
+            <h3>
+                {{ job.job_title }} —
+                {{ job.company_name }}
+            </h3>
+
+            <p class="score">
+                {{ job.match_percentage }}% Match
+            </p>
+
+            <progress
+                value="{{ job.match_percentage }}"
+                max="100">
+            </progress>
+
+            <p class="matched">
+                <strong>Matching Skills:</strong>
+                {{ job.matching_skills | join(', ') if job.matching_skills else 'None' }}
+            </p>
+
+            <p class="missing">
+                <strong>Missing Skills:</strong>
+                {{ job.missing_skills | join(', ') if job.missing_skills else 'None' }}
+            </p>
+
+        </div>
+
+        {% else %}
+
+        <div class="card">
+            <p>
+                No jobs found. Add jobs with requirements first.
+            </p>
+        </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+</div>
+</body>
+</html>

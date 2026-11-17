@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jobs - Job Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+        }
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        input, select, textarea {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button, .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .delete {
+            background: #dc2626;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        .message {
+            padding: 12px;
+            background: #e0f2fe;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <a href="/">← Back to Dashboard</a>
+    <h1>Manage Jobs</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="card">
+        <h2>Add New Job</h2>
+
+        <form action="{{ url_for('add_job') }}" method="POST">
+
+            <select name="company_id" required>
+                <option value="">Select Company</option>
+                {% for company in companies %}
+                    <option value="{{ company.company_id }}">
+                        {{ company.company_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <input name="job_title"
+                   placeholder="Job Title"
+                   maxlength="100" required>
+
+            <select name="job_type">
+                <option value="">Select Job Type</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Contract">Contract</option>
+                <option value="Internship">Internship</option>
+            </select>
+
+            <input type="number" name="salary_min"
+                   placeholder="Minimum Salary" min="0">
+
+            <input type="number" name="salary_max"
+                   placeholder="Maximum Salary" min="0">
+
+            <input type="url" name="job_url"
+                   placeholder="Job URL" maxlength="300">
+
+            <label>Date Posted</label>
+            <input type="date" name="date_posted">
+
+            <textarea name="requirements"
+                      placeholder="Required skills separated by commas, e.g. Python, SQL, Flask"
+                      rows="3"></textarea>
+
+            <button type="submit">Add Job</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Job Listings</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Company</th>
+                    <th>Type</th>
+                    <th>Salary Range</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.job_title }}</td>
+                    <td>{{ job.company_name or '-' }}</td>
+                    <td>{{ job.job_type or '-' }}</td>
+                    <td>
+                        {% if job.salary_min is not none and job.salary_max is not none %}
+                            ${{ "{:,}".format(job.salary_min) }}
+                            -
+                            ${{ "{:,}".format(job.salary_max) }}
+                        {% else %}
+                            Not specified
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class="btn"
+                           href="{{ url_for('edit_job', job_id=job.job_id) }}">
+                            Edit
+                        </a>
+
+                        <form action="{{ url_for('delete_job', job_id=job.job_id) }}"
+                              method="POST"
+                              style="display:inline;"
+                              onsubmit="return confirm('Delete this job?');">
+                            <button class="delete" type="submit">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No jobs added yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

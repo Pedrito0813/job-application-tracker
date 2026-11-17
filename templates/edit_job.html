@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Job - Job Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+        }
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <a href="{{ url_for('jobs') }}">← Back to Jobs</a>
+    <h1>Edit Job</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <label>Company</label>
+        <select name="company_id" required>
+            {% for company in companies %}
+                <option value="{{ company.company_id }}"
+                    {% if company.company_id == job.company_id %}
+                        selected
+                    {% endif %}>
+                    {{ company.company_name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label>Job Title</label>
+        <input type="text" name="job_title"
+               value="{{ job.job_title }}"
+               maxlength="100" required>
+
+        <label>Job Type</label>
+        <select name="job_type">
+            <option value="">Select Job Type</option>
+            {% for type in ['Full-time', 'Part-time', 'Contract', 'Internship'] %}
+                <option value="{{ type }}"
+                    {% if job.job_type == type %}selected{% endif %}>
+                    {{ type }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label>Minimum Salary</label>
+        <input type="number" name="salary_min"
+               value="{{ job.salary_min if job.salary_min is not none else '' }}"
+               min="0">
+
+        <label>Maximum Salary</label>
+        <input type="number" name="salary_max"
+               value="{{ job.salary_max if job.salary_max is not none else '' }}"
+               min="0">
+
+        <label>Job URL</label>
+        <input type="url" name="job_url"
+               value="{{ job.job_url or '' }}"
+               maxlength="300">
+
+        <label>Date Posted</label>
+        <input type="date" name="date_posted"
+               value="{{ job.date_posted or '' }}">
+
+        <label>Required Skills (separated by commas)</label>
+        <textarea name="requirements" rows="3">{{ job.skills_text }}</textarea>
+
+        <button type="submit">Save Changes</button>
+
+    </form>
+</div>
+</body>
+</html>
