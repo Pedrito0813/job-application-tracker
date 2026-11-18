@@ -14,7 +14,7 @@
 ChatGPT helped me understand how to structure the Flask application, connect the frontend to the backend, and work with MySQL. It was especially useful for troubleshooting errors and implementing the Job Match feature.
 
 ## What I Modified
-I tested the suggested code in my own environment and made adjustments to get the application working with my database. I also worked on the dashboard, forms, navigation, and project documentation.
+I tested the suggested code in my own environment and then made some adjustments to get the application working with my database. I also worked on the dashboard, forms, navigation, and project documentation.
 
 ## Lessons Learned
-I learned more about how Flask, MySQL, HTML, and CSS work together in a full-stack application. I also learned that AI-generated code needs to be tested and debugged instead of assuming it will work immediately.
+I learned more about how Flask, MySQL, HTML, and CSS work together in a full-stack application. I also learned that AI-generated code needs to be tested and debugged rather than just assuming it will work immediately.
