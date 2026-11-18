@@ -60,8 +60,8 @@ The database schema is provided in `schema.sql`.
 ### 1. Clone the Repository
 
 ```bash
-git clone YOUR_REPOSITORY_URL
-cd job_tracker
+git clone https://github.com/Pedrito0813/job-application-tracker.git
+cd job-application-tracker
 ```
 
 ### 2. Install Python Dependencies
