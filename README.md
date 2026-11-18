@@ -134,4 +134,11 @@ AI assistance used during development is documented in `AI_USAGE.md`.
 
 ## Demonstration
 
-A 3–7 minute demonstration video showing the application and its main features will be included with the final GitHub submission.
+<div>
+    <a href="https://www.loom.com/share/bfb82e0498d64a1c9bbf1d4685e5325a">
+      <p>Job Application Tracker - Watch Video</p>
+    </a>
+    <a href="https://www.loom.com/share/bfb82e0498d64a1c9bbf1d4685e5325a">
+      <img style="max-width:300px;" src="https://www.loom.com/v1/videos/bfb82e0498d64a1c9bbf1d4685e5325a/thumbnail.gif">
+    </a>
+  </div>
